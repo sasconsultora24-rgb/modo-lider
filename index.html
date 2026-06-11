@@ -866,20 +866,17 @@ function submitLead() {
   const mail   = document.getElementById('lead-mail').value.trim();
   let ok = true;
 
-  // Nombre: al menos dos palabras
   const nombreOk = nombre.split(' ').filter(w=>w.length>0).length >= 2;
   document.getElementById('lead-nombre').classList.toggle('error', !nombreOk);
   document.getElementById('err-nombre').classList.toggle('show', !nombreOk);
   if (!nombreOk) ok = false;
 
-  // WhatsApp: al menos 8 dígitos
   const wppClean = wpp.replace(/\D/g,'');
   const wppOk = wppClean.length >= 8;
   document.getElementById('lead-wpp').classList.toggle('error', !wppOk);
   document.getElementById('err-wpp').classList.toggle('show', !wppOk);
   if (!wppOk) ok = false;
 
-  // Mail
   const mailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
   document.getElementById('lead-mail').classList.toggle('error', !mailOk);
   document.getElementById('err-mail').classList.toggle('show', !mailOk);
@@ -889,14 +886,15 @@ function submitLead() {
 
   LEAD = { nombre, wpp, mail, ts: new Date().toISOString() };
 
-  // Save to localStorage
-  try {
-    const leads = JSON.parse(localStorage.getItem('sas_leads') || '[]');
-    leads.push(LEAD);
-    localStorage.setItem('sas_leads', JSON.stringify(leads));
-  } catch(e) {}
+  // Send to Google Sheets
+  fetch('https://script.google.com/macros/s/AKfycbwGfW2MmAuF7i23L4f_sn4Tggqgj9Zw-AUCOrKnuTOWjbz5Ia72c3h7-zh9EFN588jy/exec', {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ nombre, wpp, mail, perfil: '' })
+  }).catch(()=>{});
 
-  // Go to splash
+  // Go to splash immediately (no-cors means we can't read response)
   showScreen('splash');
 }
 
