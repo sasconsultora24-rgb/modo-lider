@@ -887,7 +887,7 @@ function submitLead() {
   LEAD = { nombre, wpp, mail, ts: new Date().toISOString() };
 
   // Send to Google Sheets
-  fetch('https://script.google.com/macros/s/AKfycbwGfW2MmAuF7i23L4f_sn4Tggqgj9Zw-AUCOrKnuTOWjbz5Ia72c3h7-zh9EFN588jy/exec', {
+  fetch('https://script.google.com/macros/s/AKfycbzZZcZkMqRE1xgPh7zJbg8iT1BN6ergNDFR2cEpM-wdyJUiFfEXE8oMQexLVIW0-Mgx/exec', {
     method: 'POST',
     mode: 'no-cors',
     headers: {'Content-Type': 'application/json'},
